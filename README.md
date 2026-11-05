@@ -49,22 +49,22 @@ The project adheres strictly to **Clean Architecture** principles and the **MVVM
 ```mermaid
 graph TD
     subgraph Presentation Layer
-        A[ContactSyncScreen - Compose M3] -->|Observes UI State| B[ContactSyncViewModel]
+        A["ContactSyncScreen (Compose M3)"] -->|Observes UI State| B["ContactSyncViewModel"]
     end
 
     subgraph Domain Layer
-        B -->|Executes| C[SyncContactsUseCase]
-        C -->|Invokes| D[ContactRepository Interface]
-        E[Contact / SyncResult Models]
+        B -->|Executes| C["SyncContactsUseCase"]
+        C -->|Invokes| D["ContactRepository Interface"]
+        E["Contact / SyncResult Models"]
     end
 
     subgraph Data Layer
-        D <|..| F[ContactRepositoryImpl]
-        F -->|Controlled via Coroutine Semaphore| G[CrmApi / CrmApiImpl]
+        F["ContactRepositoryImpl"] -.->|Implements| D
+        F -->|Throttles via Coroutine Semaphore| G["CrmApi / CrmApiImpl"]
     end
 
     subgraph Dependency Injection
-        H[AppModule - Hilt] -->|Provides| F
+        H["AppModule (Hilt)"] -->|Provides| F
         H -->|Provides| G
     end
 ```
